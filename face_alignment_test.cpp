@@ -54,13 +54,13 @@ int main(int argc, char** argv)
 
   //load image
   IplImage *img_grayscale = NULL;
-  img_grayscale = cvLoadImage("../aa.jpg", 0);
+  img_grayscale = cvLoadImage("../img_14278.jpg", 0);
   if (img_grayscale == NULL)
   {
     return 0;
   }
 
-  IplImage *img_color = cvLoadImage("../aa.jpg", 1);
+  IplImage *img_color = cvLoadImage("../img_14278.jpg", 1);
   int pts_num = 5;
   int im_width = img_grayscale->width;
   int im_height = img_grayscale->height;
@@ -92,17 +92,21 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  // Detect 5 facial landmarks
-  seeta::FacialLandmark points[5];
-  point_detector.PointDetectLandmarks(image_data, faces[0], points);
-
-  // Visualize the results
-  cvRectangle(img_color, cvPoint(faces[0].bbox.x, faces[0].bbox.y), cvPoint(faces[0].bbox.x + faces[0].bbox.width - 1, faces[0].bbox.y + faces[0].bbox.height - 1), CV_RGB(255, 0, 0));
-  for (int i = 0; i<pts_num; i++)
+  for (int i = 0; i < faces.size(); i++)
   {
-    cvCircle(img_color, cvPoint(points[i].x, points[i].y), 2, CV_RGB(0, 255, 0), CV_FILLED);
+	  // Detect 5 facial landmarks
+	  seeta::FacialLandmark points[5];
+	  point_detector.PointDetectLandmarks(image_data, faces[i], points);
+
+	  // Visualize the results
+	  cvRectangle(img_color, cvPoint(faces[i].bbox.x, faces[i].bbox.y), cvPoint(faces[i].bbox.x + faces[i].bbox.width - 1, faces[i].bbox.y + faces[i].bbox.height - 1), CV_RGB(255, 0, 0));
+	  for (int i = 0; i<pts_num; i++)
+	  {
+		  cvCircle(img_color, cvPoint(points[i].x, points[i].y), 2, CV_RGB(0, 255, 0), CV_FILLED);
+	  }
   }
-  cvSaveImage("../resultaa.jpg", img_color);
+
+  cvSaveImage("../img_14278_out.jpg", img_color);
 
   // Release memory
   cvReleaseImage(&img_color);
